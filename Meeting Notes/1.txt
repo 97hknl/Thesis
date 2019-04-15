@@ -1,3 +1,75 @@
 9th April
 
-1. Which programming language to use?
+1. Which programming language to use? - python
+2. Am I allowed to use libraries? - yes
+3. A machine learning approach to summarize? Hybrid? If hybrid, then form judging criteria?
+4. Some libraries that search thorugh a text for Wikipedia articles / annotations. Can look into implementation of this algorithm? USe this library? [A Framework for Benchmarking Entity-Annotation Systems]
+5. NLP methods in python https://www.quora.com/What-is-the-best-Python-code-that-extract-all-phrases-and-part-of-speech-POS-tags-of-a-sentence
+6. 
+
+Problem to be broken into two subparts:
+1. Parsing
+	- Making a class for entities
+	- Count frequency, also frequency in consequtive sentences (As that should increase it's importance).
+	- Need to find a way to check if it is a Proper / Common Noun / Verb.
+	- Have boolean parameters: isInQuotes, isCaps, isTime (week / day / month).
+	- Maintain dictionary of words to match input words. Dictionaries for nouns, etc.
+	- Handle edge cases of input reading: VU's , New York
+	- Reduce similar words into the same entity (differ / differentiate / difference).
+	- Check if it is the subject of the word.
+	
+	- Candidate Key phrases approach: extraction of candidate keyphrases considering punctuations and stop words as the phrase 
+		boundary, check paper : A Hybrid Approach to Extract Keyphrases from Medical Documents
+2. Saliency
+	- Rank words higher if:
+		- Quoted.
+		- Noun / Verb
+		- Bold / Italic
+		- Capitalised
+		- High frequency
+		- time
+		- Check the importance of sentence it came from? Should we include sentence importance to check the rank of a word?
+		- Computing word importance using TF * IDF = n . log(M/m)
+		- Look for adjectives near an entity (significant growth) from edmundson
+
+
+Action Points:
+- Discover more edge cases of input reading.
+
+
+[ONLY ENGLISH LANGUAGE]
+[DO IT IN PYTHON]
+
+Jacopo's Input:
+1. Do NLP pre-processing
+2. Tokenizaton
+3. Translation: find the root of the word (plural to singular)
+4. NAme entity recognition: is the task of diving given text into (identify the substing that belongs to an entity)
+5. SpaCy: Speech Tagging. Download it, it has named entity recognition.
+
+Find the state of the art for NER (BERT? by google). I need to find the state of the art 
+
+
+TASKS:
+
+1. What is the beststate of the art in NAmed Entity Recognition and NLP preprocessing
+
+NLP community like to test everything on data sets. NER : BERT, NEURO-NER.
+To read about NLP pre-processing, go for Jucosky(Stanford) textbook.
+
+2. Standford open NLP framework / Spacy preprocessing to do. 
+3. Learn ML: python, keras (tensor flow, pytorch)
+
+
+So far those on parsing. Find papers in saliency.
+
+1. Saliency in paragraph? 
+
+- Think of a way to define saliency? Then think of a method? We may decide to do some deep learning (i nthis case we might think of a deep learning). 
+
+- Implement a base line by the end of month.
+
+Develop a method. do not return too many entities. My text is news. Look for news corpus, that is my input.
+- Instead of req, page rank (importance)
+
+data sets created for summarization, check your ranking.It's an extrinsic approach. Look for intrinsic measures. Do literature study on methods. As a last resort, we do human evalutaion. We select some candidates and ask them which entities should be there?
