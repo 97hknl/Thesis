@@ -1,0 +1,3 @@
+[submodule "NLP-progress"]
+	path = NLP-progress
+	url = https://github.com/sebastianruder/NLP-progress.git
