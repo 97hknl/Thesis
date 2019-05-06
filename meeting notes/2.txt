@@ -1,0 +1,34 @@
+if baseline implemented, thursday between 10-11, otherwise next tuesday at 10:30.
+
+
+a list of papers read, reserch statemetn, baseline. 
+
+
+3 / 4 data sets
+
+
+read facs that matter
+
+
+list of entities ranked by importance. use all the models. use pos + ner + srl
+
+
+how do you eval it? Research on it.
+
+
+Let JAcopop know last momnet atThursday evening.
+
+
+put all the code at github, share with jacopo, start with latex, share with jacopo. 
+
+
+Thursday:
+
+Friday:
+
+Saturday:
+
+Sunday:
+
+Monday:
+
