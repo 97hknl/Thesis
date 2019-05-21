@@ -1,0 +1,34 @@
+Agenda:
+
+
+
+1. How to cite?
+- Should I stick to one version of citing or can I combine multiple? 
+- Is there a preference of one format over other? 
+- In some references, the date of the publication is not known, is it fine to proceed without the date? 
+- Is it mandatory to mention the page number from the citation?
+
+2. Format of the paper:
+- What should be the desired page length?
+- Does the numebr of columns matter?
+- Should I have all figures and tables at the end of the paper in the appendix?
+- Should I include parts of code in my paper?
+
+3. TODO:
+- Try the baselines with different libraries
+- Gather more data and sanitize it
+- 
+
+4. How should we test the output?
+- F1
+- human eval to grade
+
+5. Baselines
+- Frequency Analysis
+- LDA + POS + Subject/Object
+- Sentence Scoring
+- Summary extraction
+- Pagerank : entity centrality, google paper
+- Phrase vectors : file:///home/harsh/Downloads/kevin_jacobs.pdf
+- gain metrics from: https://pdfs.semanticscholar.org/0ce1/8c7d516d0dc61aabe10a552a47cde9c60b9d.pdf
+
