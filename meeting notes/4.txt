@@ -27,6 +27,7 @@ Agenda:
 - Frequency Analysis
 - LDA + POS + Subject/Object
 - Sentence Scoring
+- Word Importance
 - Summary extraction
 - Pagerank : entity centrality, google paper
 - Phrase vectors : file:///home/harsh/Downloads/kevin_jacobs.pdf

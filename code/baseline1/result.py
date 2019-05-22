@@ -8,6 +8,79 @@ class Result:
         self.detected_most_salient_entities = []
         self.detected_less_salient_entities = []
 
+    # sue mode = 1 for most salient entities
+    def numTruePositives(self, mode):
+        result = 0
+        if mode == 1:
+            for item in self.detected_most_salient_entities:
+                if item.text in self.most_salient_entities:
+                    result += 1
+        else:
+            for item in self.detected_less_salient_entities:
+                if item.text in self.less_salient_entities:
+                    result += 1
+
+        return result
+
+    def numFalsePositives(self, mode):
+        result = 0
+        if mode == 1:
+            for item in self.detected_most_salient_entities:
+                if item.text not in self.most_salient_entities:
+                    result += 1
+        else:
+            for item in self.detected_less_salient_entities:
+                if item.text not in self.less_salient_entities:
+                    result += 1
+
+        return result
+
+    def numFalseNegatives(self, mode):
+        result = 0
+        if mode == 1:
+            for item in self.most_salient_entities:
+                for item2 in self.detected_most_salient_entities:
+                    if item != item2.text:
+                        result += 1
+        else:
+            for item in self.less_salient_entities:
+                for item2 in self.detected_less_salient_entities:
+                    if item != item2.text:
+                        result += 1
+
+        return result
+
+    def precision(self, mode):
+        TP = self.numTruePositives(mode)
+        FP = self.numFalsePositives(mode)
+
+        if TP + FP == 0:
+            return -1
+        else:
+            return TP / (TP + FP)
+
+
+    def recall(self, mode):
+        TP = self.numTruePositives(mode)
+        FN = self.numFalseNegatives(mode)
+
+        if TP + FN == 0:
+            return -1
+        else:
+            return TP / (TP + FN)
+
+    def f1score(self, mode):
+        pre = self.precision(mode)
+        rec = self.recall(mode)
+
+        if pre < 0 or rec < 0:
+            return -1
+        elif pre + rec == 0:
+            return -2
+        else:
+            return 2 * (pre * rec) / (pre + rec)
+
+
     def percentageExtraMostSalientEntities(self):
         result = 0
         for item in self.detected_most_salient_entities:

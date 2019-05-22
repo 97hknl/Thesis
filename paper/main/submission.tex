@@ -1,8 +1,6 @@
 \documentclass{article}
 
-
 \usepackage{arxiv}
-
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
 \usepackage{hyperref}       % hyperlinks
@@ -13,6 +11,7 @@
 \usepackage{microtype}      % microtypography
 \usepackage{lipsum}
 
+\bibliographystyle{unsrt}
 
 \title{Entity salience in short textual paragraphs}
 
@@ -26,16 +25,16 @@
 \begin{document}
 	\maketitle
 	
-	
-	\section{Abstract}
-	
+	\begin{abstract}
+		\lipsum[1]
+	\end{abstract}
+		
 	\section{Introduction}
-	Make sure to have a short introduction of the oncoming sections. A brief agenda.
-	
-	\section{Problem Statement}
 	With the advancements in technology, human attention span has been a central factor in design of interactive applications and algorithms. Paragraphs containing verbose and expressive text require effective decimation to convey the bulk information. Textual paragraphs are usually centered towards a subject which is conveyed through multiple entities. Entity is another word for the classification of word / information in a text. Common examples of entity classes include Person, Location, Organization and Time.\
 	
-	Entity salience refers to the act of parsing entities from a piece of text and then ranking them in order of their importance / relevance to the text. For this project, short news articles are considered as input text. The core part of the project is to develop an algorithm that can rank the parsed entities in the order of their importance. For the given news article as input text, the output should be a sorted list of entities.  
+	Entity salience refers to the act of parsing entities from a piece of text and then ranking them in order of their importance / relevance to the text. For this project, short news articles are considered as input text. The core part of the project is to develop an algorithm that can rank the parsed entities in the order of their importance. For the given news article as input text, the output should be a sorted list of entities.
+	
+	Make sure to have a short introduction of the oncoming sections. A brief agenda.
 	
 	\section{Related Work}
 	
@@ -55,25 +54,37 @@
 		 
 		News article writers tend to emphasize certain points by quoting speech of people. In the text: \textit{"And now for the national military news, Trump asserts, "We are going to increase budget for the Navy S.E.A.L.". Families of troops were also assured free education and non-taxable income."}, it is certain that the subject of the text is \textit{the increment of budget for Navy S.E.A.L.}. In such situations, authors credit people by quoting them. As such, if entities belong to a sentence that was quoted, it is very likely that the entity is important.
 		
-		Furthermore, if it is known that the text is \textbf{bold}, \underline{underlined} or, \textit{italicized}, the fact can be used to emphasize on the entity. Often, the presence of punctuation also helps in laying the importance of an entity. If the entity was followed by a punctuation, be it exclamation \textit{"!"} or comma \textit{","}, the author signifies a break in the sentence flow, indicating the importance of the entity. However, a strong metric is needed to measure such factors while parsing and reducing the chance of causing false positives.  
+		Furthermore, if it is known that the text is \textbf{bold}, \underline{underlined} or, \textit{italicized}, the fact can be used to emphasize on the entity. Often, as mentioned in the book \cite{Jurafsky}, the presence of punctuation also helps in laying the importance of an entity. If the entity was followed by a punctuation, be it exclamation \textit{"!"} or comma \textit{","}, the author signifies a break in the sentence flow, indicating the importance of the entity. However, a strong metric is needed to measure such factors while parsing and reducing the chance of causing false positives.
+		
+		However, due to the limited scope of the project, pre-trained models from various libraries will be used. At the moment, \textit{SpaCy}, \textit{Flair}, and \textit{Stanford CoreNLP} library in python appear to be state-of-the-art.
 		
 	\section{Dataset}
 	\subsection{Collecting Data}
 		For this project, the input data has been restricted to short textual news paragraphs. While there are a myriad of news articles available on the web, collecting data specific to this research purpose has been a challenge. Most of the news sources limit the usage of their data by copyright restrictions. Furthermore, if lucid data is available, then obtaining it's accurate annotation becomes a problem. A preferable dataset would be that of a huge news corpus along with annotated salience entities for testing.
 		
-		The research community has explored  already existing datasets for the entity salience task, e.g. the Microsoft Document  Aboutness (MDA) dataset, and the New York Times (NYT) dataset. However, neither dataset provides the underlying document content due to copyright restrictions.  Moreover, in these dataset the entity  candidates have been generated  automatically using proprietary NER systems. \cite{crowdsourced_corpus}
+		As mentioned in the article \cite{Dojchinovski} "The research community has explored  already existing datasets for the entity salience task, e.g. the Microsoft Document  Aboutness (MDA) dataset, and the New York Times (NYT) dataset. However, neither dataset provides the underlying document content due to copyright restrictions.  Moreover, in these dataset the entity  candidates have been generated automatically using proprietary NER systems."
 	
 		\subsection{Reuters-128}
-		Dojchinovski, et al. provide corpus  with  crowdsourced entity salience annotations by reusing the NEL Reuters–128 corpus published in he NLP Interchange Format (NIF). This dataset can be downloaded here \footnote[1]{https://github.com/KIZI/ner-eval-collection}.
+		Dojchinovski, et al. provide corpus  with  crowdsourced entity salience annotations by reusing the NEL Reuters–128 corpus published in he NLP Interchange Format (NIF). This dataset can be downloaded here\footnote[1]{https://github.com/KIZI/ner-eval-collection}.. This dataset contains short textual paragraphs based on economic news.
+		
+			\subsubsection{Pre-processing}
+			Since the data was mentioned in a NIF format, it had to go through some pre-processing to be used by various python libraries. The input data came as a single NIF file with multiple articles and their entities inside. Each chunk began with their position on web: a url appended with the article number and the character position within the article. (Example: \textit{<http://aksw.org/N3/Reuters-128/43\#char=143,146>})
+			
+			The articles were embedded in a chunk containing the string \textit{nif:Context}. Therefore, it acted as a delimiter to separate the articles from entities. The articles were read and appended into an \textit{ArrayList} and the entities were eventually added as a property of the article. For the relevance of the project, the entities with text \textit{nif:NamedEntity} were kept while those with \textit{nif:CommonEntity} were removed. The named entities were mentioned in three pre-ranked categories: \textit{most\_salient, less\_salient, not\_salient}.
+			
+			The articles, along with their given named entities were written into separate files and separated by \textit{<delim>}. The entire input filtering was done in \textit{JAVA}. 
+			
 	
-	TODO: mention all the different datasets to be used, mention their formats, mention their pre-processing, mention a way of testing their result.
+	TODO: mention all the different datasets to be used, mention their formats.
 	
 	TODO: plots for data. plot for avg. amounf of entities parsed in an article in a dataset.
 		
-	\section{Baseline 1}
-	Parsing of the entities is not central to the project, and hence, pre-trained models from various libraries will be used. At the moment, SpaCy, Flair and Stanford CoreNLP library in python appear to be state-of-the-art.
+	\section{Methods}
+	The task of outputting a list of salient entities from a short textual news paragraph has been divided into multiple baselines. Each baseline implements a different approach of achieving the task. They are then tested with the annotated entities provided with the corpus. 
 	
-	TODO: explain how flair works with ref
+		\subsection{Baseline 1 - Frequency Analysis}
+	
+		TODO: explain how flair works with ref
 	
 	
 	\section{Results}
@@ -82,37 +93,39 @@
 	
 	\section{Future Work}
 	
-	\begin{thebibliography}{unsrt}
-		\bibitem{crowdsourced_corpus}
-		Milan Dojchinovski, Dinesh Reddy, Tomáš Kliegr, Tomas Vitvar, Harald Sack
-		\emph{Crowdsourced Corpus with Entity Salience Annotations}
-		\bibitem{Facts_That_Matter}
-		Marco Ponza, Luciano Del Corro, Gerhard Weikum	(2018)
-		\emph{Facts That Matter}
-		\bibitem{nlp_state_of_the_art}
-		Diksha Khurana, Aditya Koli, Kiran Khatter, Sukhdev Singh (2018)
-		\emph{Natural Language Processing: State of The Art, Current Trends and Challenges}
-		\bibitem{jurafsky}
-		Daniel Jurafsky (2018) 
-		\emph{Speech and Language Processing}
-		\bibitem{kamal}
-		Kamal Sarkar
-		\emph{A Hybrid Approach to Extract Keyphrases from Medical Documents}
-		\bibitem{edmundson}
-		H. P. Edmundson
-		\emph{New Methods in Automatic Extracting}
-		\bibitem{chienese_guys}
-		Wei Shen, Jianyong Wang
-		\emph{Entity Linking with a Knowledge Base: Issues, Techniques, and Solutions}
-		\bibitem{italian_guys}
-		Ernesto D’Avanzo, Alessandro Vallin, Bernardo Magnini
-		\emph{Keyphrase Extraction for Summarization Purposes}
-		\bibitem{lexrank}
-		Güneş Erkan, Dragomir R. Radev
-		\emph{LexRank: Graph-based Lexical Centrality as Salience in Text Summarization}
-		\bibitem{lunh}
-		Lunh (1958)
-		\emph{The Automatic Creation of Literature Abstracts}
-		
-	\end{thebibliography}
+	\bibliography{references}
+	 
+	
+%	\begin{thebibliography}{unsrt}
+%		\bibitem{crowdsourced_corpus}
+%		Milan Dojchinovski, Dinesh Reddy, Tomáš Kliegr, Tomas Vitvar, Harald Sack
+%		\emph{Crowdsourced Corpus with Entity Salience Annotations}
+%		\bibitem{Facts_That_Matter}
+%		Marco Ponza, Luciano Del Corro, Gerhard Weikum	(2018)
+%		\emph{Facts That Matter}
+%		\bibitem{nlp_state_of_the_art}
+%		Diksha Khurana, Aditya Koli, Kiran Khatter, Sukhdev Singh (2018)
+%		\emph{Natural Language Processing: State of The Art, Current Trends and Challenges}
+%		\bibitem{jurafsky}
+%		Daniel Jurafsky (2018) 
+%		\emph{Speech and Language Processing}
+%		\bibitem{kamal}
+%		Kamal Sarkar
+%		\emph{A Hybrid Approach to Extract Keyphrases from Medical Documents}
+%		\bibitem{edmundson}
+%		H. P. Edmundson
+%		\emph{New Methods in Automatic Extracting}
+%		\bibitem{chienese_guys}
+%		Wei Shen, Jianyong Wang
+%		\emph{Entity Linking with a Knowledge Base: Issues, Techniques, and Solutions}
+%		\bibitem{italian_guys}
+%		Ernesto D’Avanzo, Alessandro Vallin, Bernardo Magnini
+%		\emph{Keyphrase Extraction for Summarization Purposes}
+%		\bibitem{lexrank}
+%		Güneş Erkan, Dragomir R. Radev
+%		\emph{LexRank: Graph-based Lexical Centrality as Salience in Text Summarization}
+%		\bibitem{lunh}
+%		Lunh (1958)
+%		\emph{The Automatic Creation of Literature Abstracts}
+
 \end{document}

@@ -1,15 +1,15 @@
-\BOOKMARK [1][-]{section.1}{Abstract}{}% 1
-\BOOKMARK [1][-]{section.2}{Introduction}{}% 2
-\BOOKMARK [1][-]{section.3}{Problem Statement}{}% 3
-\BOOKMARK [1][-]{section.4}{Related Work}{}% 4
-\BOOKMARK [1][-]{section.5}{Motivation}{}% 5
-\BOOKMARK [1][-]{section.6}{Parsing}{}% 6
-\BOOKMARK [2][-]{subsection.6.1}{Challenges}{section.6}% 7
-\BOOKMARK [2][-]{subsection.6.2}{Ranking strategies}{section.6}% 8
-\BOOKMARK [1][-]{section.7}{Dataset}{}% 9
-\BOOKMARK [2][-]{subsection.7.1}{Collecting Data}{section.7}% 10
-\BOOKMARK [2][-]{subsection.7.2}{Reuters-128}{section.7}% 11
-\BOOKMARK [1][-]{section.8}{Baseline 1}{}% 12
-\BOOKMARK [1][-]{section.9}{Results}{}% 13
-\BOOKMARK [1][-]{section.10}{Conclusion}{}% 14
-\BOOKMARK [1][-]{section.11}{Future Work}{}% 15
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Related Work}{}% 2
+\BOOKMARK [1][-]{section.3}{Motivation}{}% 3
+\BOOKMARK [1][-]{section.4}{Parsing}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{Challenges}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Ranking strategies}{section.4}% 6
+\BOOKMARK [1][-]{section.5}{Dataset}{}% 7
+\BOOKMARK [2][-]{subsection.5.1}{Collecting Data}{section.5}% 8
+\BOOKMARK [2][-]{subsection.5.2}{Reuters-128}{section.5}% 9
+\BOOKMARK [3][-]{subsubsection.5.2.1}{Pre-processing}{subsection.5.2}% 10
+\BOOKMARK [1][-]{section.6}{Research Methods}{}% 11
+\BOOKMARK [2][-]{subsection.6.1}{Baseline 1 - Frequency Analysis}{section.6}% 12
+\BOOKMARK [1][-]{section.7}{Results}{}% 13
+\BOOKMARK [1][-]{section.8}{Conclusion}{}% 14
+\BOOKMARK [1][-]{section.9}{Future Work}{}% 15
