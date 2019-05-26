@@ -172,7 +172,7 @@ def main():
     directory = "/home/harsh/Downloads/data/ner-eval-collection-master/plainTextFiles/"
     results = []
 
-    for i in range(0, 2):
+    for i in range(0, 128):
         filename = directory + str(i) + ".txt"
         file = open(filename, "r")
         file_content = file.read()
@@ -194,7 +194,7 @@ def main():
         # stemmed_frequency_analysis(doc, article_result)
         coref_resolution(doc, article_result)
         results.append(article_result)
-        
+
     graph = Graphs(results)
     graph.graph2()
 
