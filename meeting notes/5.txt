@@ -1,0 +1,29 @@
+Agenda:
+
+2. Format of the paper:
+- What should be the desired page length?
+- Does the numebr of columns matter?
+- Should I have all figures and tables at the end of the paper in the appendix?
+- Should I include parts of code in my paper?
+
+3. TODO:
+- Try the baselines with different libraries
+- Gather more data and sanitize it
+- 
+
+4. How should we test the output?
+- Is more / less important entity a good way of testing?
+- F1
+	- Some files do not have a less / most-important entity. Should we duplicate in this case?
+- human eval to grade
+
+5. Baselines
+- Frequency Analysis
+- LDA + POS + Subject/Object
+- Sentence Scoring
+- Word Importance
+- Summary extraction
+- Pagerank : entity centrality, google paper
+- Phrase vectors : file:///home/harsh/Downloads/kevin_jacobs.pdf
+- gain metrics from: https://pdfs.semanticscholar.org/0ce1/8c7d516d0dc61aabe10a552a47cde9c60b9d.pdf
+
