@@ -9,87 +9,9 @@ from nltk.corpus import stopwords
 sys.path.append('../')
 from result import Result
 from entity import Entity
+from graphs import Graphs
 
-def to_string1(list):
-    result = ""
-
-    for element in list:
-        result += element.strip() + "\n"
-
-    return result
-
-
-def to_string2(list):
-    result = ""
-
-    for element in list:
-        result += element.text + "\t" + str(element.freq) + "\n"
-
-    return result
-
-def graph(results):
-    numMostSalientEntities = []
-    numLessSalientEntities = []
-    numDetectedMostSalientEntities = []
-    numDetectedLessSalientEntities = []
-    indices = []
-
-    for result in results:
-        numMostSalientEntities.append(len(result.most_salient_entities))
-        numLessSalientEntities.append(len(result.less_salient_entities))
-        numDetectedMostSalientEntities.append(len(result.detected_most_salient_entities))
-        numDetectedLessSalientEntities.append(len(result.detected_less_salient_entities))
-        indices.append(result.index)
-
-    plt.plot(indices, numMostSalientEntities, label = "Number of Most Salient Entities")
-    plt.plot(indices, numLessSalientEntities, label="Number of Less Salient Entities")
-    plt.plot(indices, numDetectedMostSalientEntities, label="Number of Detected Most Salient Entities")
-    plt.plot(indices, numDetectedLessSalientEntities, label="Number of Detected Less Salient Entities")
-
-    plt.xlabel('Article index')
-    plt.legend()
-    plt.show()
-
-def graph2(results):
-    indices = []
-    percentageExtraMostSalient = []
-    percentageExtraLessSalient = []
-    percentageLessMostSalient = []
-    percentageLessLessSalient = []
-
-    for result in results:
-        percentageExtraMostSalient.append(result.percentageExtraMostSalientEntities())
-        percentageExtraLessSalient.append(result.percentageExtraLessSalientEntities())
-        percentageLessMostSalient.append(result.percentageLessMostSalientEntities())
-        percentageLessLessSalient.append(result.percentageLessLessSalientEntities())
-        indices.append(result.index)
-
-    plt.plot(indices, percentageExtraMostSalient, label = "Percentage of Most Salient Entities detected extra")
-    plt.plot(indices, percentageExtraLessSalient, label = "Percentage of Less Salient Entities detected extra")
-    plt.plot(indices, percentageLessMostSalient, label = "Percentage of Most Salient Entities not detected")
-    plt.plot(indices, percentageLessLessSalient, label = "Percentage of Less Salient Entities not detected")
-
-    plt.xlabel('Article index')
-    plt.legend()
-    plt.show()
-
-def graph3(results):
-    indices = []
-    f1scoresMostSalientEntities = []
-    f1scoresLessSalientEntities = []
-
-    for result in results:
-        indices.append(result.index)
-        f1scoresMostSalientEntities.append(result.f1score(1))
-        f1scoresLessSalientEntities.append(result.f1score(2))
-
-    plt.plot(indices, f1scoresMostSalientEntities, label = "F1 Scores for detecting most salient entities")
-    plt.plot(indices, f1scoresMostSalientEntities, label = "F1 Scores for detecting less salient entities")
-
-    plt.xlabel('Article index')
-    plt.legend()
-    plt.show()
-
+# simple frequency analysis - classifies some entity as more important if it has frequency > 1, else less important.
 
 def contains(entities, entity):
     for item in entities:
@@ -98,6 +20,12 @@ def contains(entities, entity):
             return True
         return False
 
+def contains_stem(entities, entity):
+    for item in entities:
+        if entity.stem in item.stem or item.stem in entity.stem:
+            item.freq += 1
+            return True
+        return False
 
 def report(result):
     directory = "/home/harsh/Downloads/data/ner-eval-collection-master/plainTextFiles/"
@@ -107,56 +35,92 @@ def report(result):
     file.write(str(result.index) + "\n\n" + result.article_text)
 
     file.write("\n\nMost Salient Entities\n")
-    file.write(to_string1(result.most_salient_entities))
+    file.write(to_string1(result.mse))
     file.write("\nLess Salient Entities\n")
-    file.write(to_string1(result.less_salient_entities))
+    file.write(to_string1(result.lse))
 
     file.write("\nDetected Most Salient Entities\n")
-    file.write(to_string2(result.detected_most_salient_entities))
+    file.write(to_string2(result.detected_mse))
     file.write("\nDetected Less Salient Entities\n")
-    file.write(to_string2(result.detected_less_salient_entities))
+    file.write(to_string2(result.detected_lse))
 
-
-
-
-nlp = spacy.load("en_core_web_lg")
-directory = "/home/harsh/Downloads/data/ner-eval-collection-master/plainTextFiles/"
-results = []
-
-for i in range (0,128):
-    filename = directory + str(i) + ".txt"
-    file = open(filename, "r")
-    file_content = file.read()
-    file_content = file_content.split("<delim>")
-    article_text = file_content[0]
-    doc = nlp(article_text)
+def stemmed_frequency_analysis(doc, article_result):
+    important_entities = ['PERSON', 'ORG', 'GPE', 'EVENT']
     entities = []
 
-    if file_content[1]:
-        file_content[1].strip()
-        most_salient_entities_text = file_content[1][1:-1]
-        most_salient_entities_text = most_salient_entities_text.split(",")
+    for ent in doc.ents:
+        if ent.label_ in important_entities:
+            entity = Entity(ent)
+            if not contains_stem(entities, entity):
+                entities.append(entity)
 
-    if file_content[2]:
-        file_content[2].strip()
-        less_salient_entities_text = file_content[2][1:-1]
-        less_salient_entities_text = less_salient_entities_text.split(",")
+    for entity in entities:
+        if entity.freq > 1:
+            article_result.detected_mse.append(entity)
+        else:
+            article_result.detected_lse.append(entity)
 
-    article_result = Result(i, article_text, most_salient_entities_text, less_salient_entities_text)
+def modified_frequency_analysis(doc, article_result):
+    important_entities = ['PERSON', 'ORG', 'GPE', 'EVENT']
+    entities = []
+
+    for ent in doc.ents:
+        if ent.label_ in important_entities:
+            entity = Entity(ent)
+            if not contains(entities, entity):
+                entities.append(entity)
+
+    for entity in entities:
+        if entity.freq > 1:
+            article_result.detected_mse.append(entity)
+        else:
+            article_result.detected_lse.append(entity)
+
+def frequency_analysis(doc, article_result):
+    entities = []
 
     for ent in doc.ents:
         entity = Entity(ent)
         if not contains(entities, entity):
             entities.append(entity)
 
-
     for entity in entities:
         if entity.freq > 1:
-            article_result.detected_most_salient_entities.append(entity)
+            article_result.detected_mse.append(entity)
         else:
-            article_result.detected_less_salient_entities.append(entity)
+            article_result.detected_lse.append(entity)
 
-    results.append(article_result)
-    # report(article_result)
 
-graph3(results)
+def main():
+    nlp = spacy.load("en_core_web_lg")
+    directory = "/home/harsh/Downloads/data/ner-eval-collection-master/plainTextFiles/"
+    results = []
+
+    for i in range(0, 2):
+        filename = directory + str(i) + ".txt"
+        file = open(filename, "r")
+        file_content = file.read()
+        file_content = file_content.split("<delim>")
+        article_text = file_content[0]
+        doc = nlp(article_text)
+
+        if file_content[1]:
+            file_content[1].strip()
+            mse_text = file_content[1].replace("[", "").replace("]", "").replace("\n", "")
+            mse_text = mse_text.split(",")
+
+        if file_content[2]:
+            file_content[2].strip()
+            lse_text = file_content[2].replace("[", "").replace("]", "").replace("\n", "")
+            lse_text = lse_text.split(",")
+
+        article_result = Result(i, article_text, mse_text, lse_text)
+        stemmed_frequency_analysis(doc, article_result)
+        results.append(article_result)
+        print(article_result.toString())
+        # graph = Graphs(results)
+        # graph.graph2()
+
+
+if __name__ == "__main__":
+    main()
