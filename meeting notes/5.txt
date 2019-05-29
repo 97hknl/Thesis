@@ -12,13 +12,14 @@ Agenda:
 - 
 
 4. How should we test the output?
+- Scoring / criteria according to other entities, not a constant (2/3)
 - Is more / less important entity a good way of testing?
 - F1
 	- Some files do not have a less / most-important entity. Should we duplicate in this case?
+	- Should we use stem in matching of f1 scores as well?
 - human eval to grade
 
 5. Baselines
-- Frequency Analysis
 - LDA + POS + Subject/Object
 - Sentence Scoring
 - Word Importance

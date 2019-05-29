@@ -1,15 +1,17 @@
 import spacy
 nlp = spacy.load("en_core_web_lg")
 import sys
+import textacy.extract
 import neuralcoref
 neuralcoref.add_to_pipe(nlp)
 from nltk.stem import PorterStemmer
+import time
 
 sys.path.append('../')
 from result import Result
 from entity import Entity
 from graphs import Graphs
-
+from TextRank4Keyword import TextRank4Keyword
 
 # simple frequency analysis - classifies some entity as more important if it has frequency > 1, else less important.
 
@@ -166,6 +168,32 @@ def frequency_analysis(doc, article_result):
         else:
             article_result.detected_lse.append(entity)
 
+def textrank(doc, article_result):
+    tr4w = TextRank4Keyword()
+    tr4w.analyze(article_result.article_text, candidate_pos=['PROPN'], window_size=4, lower=False)
+    keywords = tr4w.get_keywords()
+    porter = PorterStemmer()
+    entities = []
+    new_keywords = []
+
+    for keyword in keywords:
+        new_keywords.append((porter.stem(keyword[0]), keyword[1]))
+
+    for ent in doc.ents:
+        entity = Entity(ent)
+        if not contains(entities, entity):
+            entities.append(entity)
+        for keyword in new_keywords:
+            if keyword[0] in entity.stem:
+                entity.rank += keyword[1]
+
+
+    for entity in entities:
+        if entity.score() > 2:
+            article_result.detected_mse.append(entity)
+        else:
+            article_result.detected_lse.append(entity)
+
 
 def main():
     # nlp = spacy.load("en_core_web_lg")
@@ -191,13 +219,18 @@ def main():
             lse_text = lse_text.split(",")
 
         article_result = Result(i, article_text, mse_text, lse_text)
+
         # stemmed_frequency_analysis(doc, article_result)
-        coref_resolution(doc, article_result)
+        # coref_resolution(doc, article_result)
+        textrank(doc, article_result)
         results.append(article_result)
+        print(article_result.toString())
 
     graph = Graphs(results)
-    graph.graph2()
+    graph.graph2('textrank')
 
 
 if __name__ == "__main__":
+    start = time.time()
     main()
+    print("Time Taken : " + str(time.time() - start))

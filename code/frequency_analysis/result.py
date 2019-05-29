@@ -46,6 +46,77 @@ class Result:
 
         return result
 
+    def numTruePositivesStem(self, mode):
+        result = 0
+        if mode == 1:
+            for item in self.detected_mse:
+                if item.stem in self.stemmed_mse:
+                    result += 1
+        else:
+            for item in self.detected_lse:
+                if item.stem in self.stemmed_lse:
+                    result += 1
+
+        return result
+
+    def numFalsePositivesStem(self, mode):
+        result = 0
+        if mode == 1:
+            for item in self.detected_mse:
+                if item.stem not in self.stemmed_mse:
+                    result += 1
+        else:
+            for item in self.detected_lse:
+                if item.stem not in self.stemmed_lse:
+                    result += 1
+
+        return result
+
+    def numFalseNegativesStem(self, mode):
+        result = 0
+        if mode == 1:
+            for item in self.stemmed_mse:
+                for item2 in self.detected_mse:
+                    if item != item2.stem:
+                        result += 1
+        else:
+            for item in self.stemmed_lse:
+                for item2 in self.detected_lse:
+                    if item != item2.stem:
+                        result += 1
+
+        return result
+
+    def precisionStem(self, mode):
+        TP = self.numTruePositivesStem(mode)
+        FP = self.numFalsePositivesStem(mode)
+
+        if TP + FP == 0:
+            return -1
+        else:
+            return TP / (TP + FP)
+
+    def recallStem(self, mode):
+        TP = self.numTruePositivesStem(mode)
+        FN = self.numFalseNegativesStem(mode)
+
+        if TP + FN == 0:
+            return -1
+        else:
+            return TP / (TP + FN)
+
+    def f1scoreStem(self, mode):
+        pre = self.precisionStem(mode)
+        rec = self.recallStem(mode)
+
+        if pre < 0 or rec < 0:
+            return -1
+        elif pre + rec == 0:
+            return -2
+        else:
+            return 2 * (pre * rec) / (pre + rec)
+
+
     def numTruePositives(self, mode):
         result = 0
         if mode == 1:
@@ -105,6 +176,11 @@ class Result:
         else:
             return TP / (TP + FN)
 
+    # do the combined f1 entities
+    # get rid of data having no entities saliented already
+    # 0 for not detected entities, discard those which did not have any#
+    # f1 on combined entities
+    # get a combined score f1 average
     def f1score(self, mode):
         pre = self.precision(mode)
         rec = self.recall(mode)

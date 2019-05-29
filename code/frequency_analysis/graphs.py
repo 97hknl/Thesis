@@ -28,7 +28,7 @@ class Graphs:
         plt.legend()
         plt.show()
 
-    def graph2(self):
+    def graph2(self, name):
         indices = []
         f1scoresMostSalientEntities = []
         f1scoresLessSalientEntities = []
@@ -43,4 +43,24 @@ class Graphs:
 
         plt.xlabel('Article index')
         plt.legend()
+        plt.savefig('/home/harsh/Downloads/Thesis/results/' + name + '.png')
+        plt.show()
+
+
+    def graph2Stem(self, name):
+        indices = []
+        f1scoresMostSalientEntities = []
+        f1scoresLessSalientEntities = []
+
+        for result in self.results:
+            indices.append(result.index)
+            f1scoresMostSalientEntities.append(result.f1scoreStem(1))
+            f1scoresLessSalientEntities.append(result.f1scoreStem(2))
+
+        plt.plot(indices, f1scoresMostSalientEntities, label = "F1 Scores for detecting most salient entities")
+        plt.plot(indices, f1scoresMostSalientEntities, label = "F1 Scores for detecting less salient entities")
+
+        plt.xlabel('Article index')
+        plt.legend()
+        plt.savefig('/home/harsh/Downloads/Thesis/results/' + name + '_stemmedMatchingScoring.png')
         plt.show()

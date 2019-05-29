@@ -115,7 +115,7 @@ def main():
     directory = "/home/harsh/Downloads/data/ner-eval-collection-master/plainTextFiles/"
     results = []
 
-    for i in range(0, 2):
+    for i in range(0, 128):
         filename = directory + str(i) + ".txt"
         file = open(filename, "r")
         file_content = file.read()
@@ -134,11 +134,12 @@ def main():
             lse_text = lse_text.split(",")
 
         article_result = Result(i, article_text, mse_text, lse_text)
-        stemmed_frequency_analysis(doc, article_result)
+        frequency_analysis(doc, article_result)
         results.append(article_result)
-        print(article_result.toString())
-        # graph = Graphs(results)
-        # graph.graph2()
+        # print(article_result.toString())
+
+    graph = Graphs(results)
+    graph.graph2('frequency_analysis')
 
 
 if __name__ == "__main__":
